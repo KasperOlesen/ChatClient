@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utils.Utils;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class EchoServer {
     private final List<ClientHandler> clientHandlerList = new LinkedList();
     Map<String, ClientHandler> userMap = new HashMap();
     String username;
-    String recievers;
+    String reciever;
 
     public static void stopServer() {
         keepRunning = false;
@@ -40,7 +41,7 @@ public class EchoServer {
                 Socket socket = serverSocket.accept(); //Important Blocking call
                 Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Connected to a client");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
-                
+
                 clientHandlerList.add(clientHandler);
                 clientHandler.start();
             } while (keepRunning);
@@ -62,27 +63,41 @@ public class EchoServer {
 
     public void messageHandler(String msg, String clientName) {
 
-//        System.out.println(msg);
+        System.out.println(msg);
 
         if (msg.startsWith("MSG") && msg.contains("#")) {
             String[] commandInput = msg.split("#");
-            
-            recievers = commandInput[1];
+
+            reciever = commandInput[1];
             msg = clientName + ": " + commandInput[2];
+            
+            if (reciever.contains(",")) {
+
+                String[] recieverList = reciever.split(",");
+                ArrayList<String> aList = new ArrayList<>(userMap.keySet());
+                for (String s : aList) {
+                    for (String recieverList1 : recieverList) {
+                        System.out.println("recieverList length: " + recieverList.length);
+                        if (s.equalsIgnoreCase(recieverList1)) {
+                            System.out.println("Sending to: " + recieverList1);
+                            send(msg, userMap.get(recieverList1));
+                        }
+                    }
+                }
+            }
 
 //            for (String commandInput1 : commandInput) {
 //                System.out.println(commandInput1);
 //            }
-            
+//            
 //            System.out.println("Found reciever: " + userMap.containsKey(recievers));
-
-            if (userMap.containsKey(recievers)) {
-                send(msg, userMap.get(recievers));    
+            if (userMap.containsKey(reciever)) {
+                send(msg, userMap.get(reciever));
             }
 
         } else {
             send("Error: Incompatible input! Missing '#' \n"
-                    + "Use MSG#Username#message to message others.", userMap.get(recievers));
+                    + "Use MSG#Username#message to message others.", userMap.get(reciever));
         }
     }
 
@@ -90,7 +105,6 @@ public class EchoServer {
         String[] commandInput;
         String[] recieverInfo;
         boolean syntaxApproved;
-        
 
         System.out.println(msg);
 
@@ -99,28 +113,30 @@ public class EchoServer {
             String command = commandInput[0];
             String reciever = commandInput[1];
 
-//            for (String commandInput1 : commandInput) {
-//                System.out.println(commandInput1);
-//            }
+
             if (commandInput.length == 3) {
                 if (reciever.contains(",")) {
                     recieverInfo = reciever.split(",");
                     syntaxApproved = recieverInfo.length > 1;
 
-//                    System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
+
                 } else {
                     syntaxApproved = true;
-//                    System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
+
                 }
             } else {
                 syntaxApproved = false;
-//                System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
+
             }
         } else {
             syntaxApproved = false;
-//            System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
+
         }
         return syntaxApproved;
+    }
+
+    public void sendUserlistToAll() {
+
     }
 
     public void send(String msg, ClientHandler reciever) {
