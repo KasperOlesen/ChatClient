@@ -20,7 +20,7 @@ public class EchoServer {
     private static ServerSocket serverSocket;
     private static final Properties properties = Utils.initProperties("server.properties");
     private final List<ClientHandler> clientHandlerList = new LinkedList();
-    Map<String, ClientHandler> userMap;
+    Map<String, ClientHandler> userMap = new HashMap();
     String username;
     String recievers;
 
@@ -40,9 +40,7 @@ public class EchoServer {
                 Socket socket = serverSocket.accept(); //Important Blocking call
                 Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Connected to a client");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
-
-                userMap = new HashMap();
-
+                
                 clientHandlerList.add(clientHandler);
                 clientHandler.start();
             } while (keepRunning);
@@ -63,14 +61,23 @@ public class EchoServer {
     }
 
     public void messageHandler(String msg, String clientName) {
-        if (msg.contains("#")) {
+
+//        System.out.println(msg);
+
+        if (msg.startsWith("MSG") && msg.contains("#")) {
             String[] commandInput = msg.split("#");
-            String command = commandInput[0].toUpperCase();
+            
             recievers = commandInput[1];
             msg = clientName + ": " + commandInput[2];
 
-            if (command.equalsIgnoreCase("MSG") && (userMap.containsKey(recievers))) {
-                send(msg, userMap.get(recievers));
+//            for (String commandInput1 : commandInput) {
+//                System.out.println(commandInput1);
+//            }
+            
+//            System.out.println("Found reciever: " + userMap.containsKey(recievers));
+
+            if (userMap.containsKey(recievers)) {
+                send(msg, userMap.get(recievers));    
             }
 
         } else {
@@ -83,23 +90,34 @@ public class EchoServer {
         String[] commandInput;
         String[] recieverInfo;
         boolean syntaxApproved;
-        if (msg.startsWith("MSG#")) {
+
+        System.out.println(msg);
+
+        if (msg.startsWith("MSG") && msg.contains("#")) {
             commandInput = msg.split("#");
-            String command = commandInput[0].toUpperCase();
+            String command = commandInput[0];
             String reciever = commandInput[1];
 
+//            for (String commandInput1 : commandInput) {
+//                System.out.println(commandInput1);
+//            }
             if (commandInput.length == 3) {
                 if (reciever.contains(",")) {
                     recieverInfo = reciever.split(",");
                     syntaxApproved = recieverInfo.length > 1;
+
+//                    System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
                 } else {
                     syntaxApproved = true;
+//                    System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
                 }
             } else {
                 syntaxApproved = false;
+//                System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
             }
         } else {
             syntaxApproved = false;
+//            System.out.println("From syntaxCheck - syntaxApproved: " + syntaxApproved);
         }
         return syntaxApproved;
     }

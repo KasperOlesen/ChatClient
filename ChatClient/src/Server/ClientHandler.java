@@ -77,20 +77,19 @@ public class ClientHandler extends Thread {
             temp = input.nextLine();
             if (temp.startsWith("USER#")) {
                 nameInput = temp.split("#");
-                if (nameInput.length <= 1) {
-                    writer.println("You didnt enter the correct command.");
-                    clientName();
-                } else {
+                if (nameInput.length == 2) {
                     chosenName = nameInput[1];
                     server.userMap.put(chosenName, this);
                     nameChanged = true;
                     writer.println("Welcome " + chosenName);
+                } else {
+                    writer.println("You didnt enter the correct command.");
+                    clientName();
                 }
             } else {
                 writer.println("You didnt enter the correct command.");
                 clientName();
             }
-            
         } else {
             writer.println("You have already chosen a username. \n"
                     + "Changing your username is not permitted.");

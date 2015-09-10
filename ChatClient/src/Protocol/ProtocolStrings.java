@@ -6,5 +6,5 @@ package Protocol;
 public class ProtocolStrings {
     
     
-  public static final String STOP = "#STOP";
+  public static final String STOP = "STOP#";
 }
