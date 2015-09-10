@@ -73,6 +73,7 @@ public class ClientHandler extends Thread {
         if (!nameChanged) {
             writer.println("Please select a username \n"
                     + "By typing USER#YourUsernameHere");
+            
 
             temp = input.nextLine();
             if (temp.startsWith("USER#")) {

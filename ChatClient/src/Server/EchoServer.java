@@ -90,6 +90,7 @@ public class EchoServer {
         String[] commandInput;
         String[] recieverInfo;
         boolean syntaxApproved;
+        
 
         System.out.println(msg);
 
