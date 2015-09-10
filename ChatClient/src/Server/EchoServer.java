@@ -70,21 +70,34 @@ public class EchoServer {
             reciever = commandInput[1];
             msg = clientName + ": " + commandInput[2];
             
+            //delete
+            //System.out.println("reciever: " +reciever);
+            //System.out.println("keyset: " + userMap.keySet());
+            
             if (reciever.contains(",") && reciever.length() > 1) {
 
-                String[] recieverList = reciever.split(",");
-                ArrayList<String> aList = new ArrayList<>(userMap.keySet());
-                for (String s : aList) {
-                    for (String recieverList1 : recieverList) {
-                        if (s.equalsIgnoreCase(recieverList1)) {
+                String[] users = reciever.split(",");
+                ArrayList<String> userMapKeyList = new ArrayList<>(userMap.keySet());
+                for (String userKeyFromMap : userMapKeyList) {
+                    
+                    //delete
+                    //System.out.println("User from list: " +userKeyFromMap);
+                    
+                    for (String user : users) {
+                        
+                        //delete
+                        //System.out.println("User from input: " +user);
+                        
+                        if (userKeyFromMap.equalsIgnoreCase(user)) {
                             
-                            send(msg, userMap.get(recieverList1.toUpperCase()));
+                            send(msg, userMap.get(user.toUpperCase()));
                         }
                     }
                 }
             }
-            else if (userMap.containsKey(reciever)) {
-                send(msg, userMap.get(reciever));
+            
+            else if (userMap.containsKey(reciever.toUpperCase())) {
+                send(msg, userMap.get(reciever.toUpperCase()));
             }
         } else {
             send("Error: Incompatible input! Missing '#' \n"
@@ -100,11 +113,11 @@ public class EchoServer {
         if (msg.startsWith("MSG") && msg.contains("#")) {
             commandInput = msg.split("#");
             String command = commandInput[0];
-            String reciever = commandInput[1];
+            String toClients = commandInput[1];
             
             if (commandInput.length == 3) {
-                if (reciever.contains(",")) {
-                    recieverInfo = reciever.split(",");
+                if (toClients.contains(",")) {
+                    recieverInfo = toClients.split(",");
                     syntaxApproved = recieverInfo.length > 1;
                 } else {
                     syntaxApproved = true;

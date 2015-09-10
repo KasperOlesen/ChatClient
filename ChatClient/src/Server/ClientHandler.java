@@ -54,6 +54,8 @@ public class ClientHandler extends Thread {
                 message = input.nextLine(); //IMPORTANT blocking call
             }
             
+            server.userMap.remove(chosenName);
+            server.sendUserlistToAll();
             writer.println(ProtocolStrings.STOP);//Echo the stop message back to the client for a nice closedown
             socket.close();
             Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Closed a Connection");
