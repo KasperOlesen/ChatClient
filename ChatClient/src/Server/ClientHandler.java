@@ -34,7 +34,7 @@ public class ClientHandler extends Thread {
             writer = new PrintWriter(socket.getOutputStream(), true);
 
             clientName();
-            
+            server.sendUserlistToAll();
             
             String message = input.nextLine(); //IMPORTANT blocking call
             Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
@@ -53,9 +53,13 @@ public class ClientHandler extends Thread {
 
                 message = input.nextLine(); //IMPORTANT blocking call
             }
+            
             writer.println(ProtocolStrings.STOP);//Echo the stop message back to the client for a nice closedown
             socket.close();
             Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Closed a Connection");
+        }catch (java.util.NoSuchElementException ex){
+            server.userMap.remove(chosenName);
+            server.sendUserlistToAll();
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,15 +80,13 @@ public class ClientHandler extends Thread {
             writer.println("Please select a username \n"
                     + "By typing USER#YourUsernameHere");
             
-
             temp = input.nextLine();
             if (temp.startsWith("USER#")) {
                 nameInput = temp.split("#");
                 if (nameInput.length == 2) {
-                    chosenName = nameInput[1];
+                    chosenName = nameInput[1].toUpperCase();
                     server.userMap.put(chosenName, this);
                     nameChanged = true;
-                    writer.println("Welcome " + chosenName);
                 } else {
                     writer.println("You didnt enter the correct command.");
                     clientName();

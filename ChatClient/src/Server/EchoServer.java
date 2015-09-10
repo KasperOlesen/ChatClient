@@ -67,34 +67,25 @@ public class EchoServer {
 
         if (msg.startsWith("MSG") && msg.contains("#")) {
             String[] commandInput = msg.split("#");
-
             reciever = commandInput[1];
             msg = clientName + ": " + commandInput[2];
             
-            if (reciever.contains(",")) {
+            if (reciever.contains(",") && reciever.length() > 1) {
 
                 String[] recieverList = reciever.split(",");
                 ArrayList<String> aList = new ArrayList<>(userMap.keySet());
                 for (String s : aList) {
                     for (String recieverList1 : recieverList) {
-                        System.out.println("recieverList length: " + recieverList.length);
                         if (s.equalsIgnoreCase(recieverList1)) {
-                            System.out.println("Sending to: " + recieverList1);
-                            send(msg, userMap.get(recieverList1));
+                            
+                            send(msg, userMap.get(recieverList1.toUpperCase()));
                         }
                     }
                 }
             }
-
-//            for (String commandInput1 : commandInput) {
-//                System.out.println(commandInput1);
-//            }
-//            
-//            System.out.println("Found reciever: " + userMap.containsKey(recievers));
-            if (userMap.containsKey(reciever)) {
+            else if (userMap.containsKey(reciever)) {
                 send(msg, userMap.get(reciever));
             }
-
         } else {
             send("Error: Incompatible input! Missing '#' \n"
                     + "Use MSG#Username#message to message others.", userMap.get(reciever));
@@ -106,37 +97,33 @@ public class EchoServer {
         String[] recieverInfo;
         boolean syntaxApproved;
 
-        System.out.println(msg);
-
         if (msg.startsWith("MSG") && msg.contains("#")) {
             commandInput = msg.split("#");
             String command = commandInput[0];
             String reciever = commandInput[1];
-
-
+            
             if (commandInput.length == 3) {
                 if (reciever.contains(",")) {
                     recieverInfo = reciever.split(",");
                     syntaxApproved = recieverInfo.length > 1;
-
-
                 } else {
                     syntaxApproved = true;
-
                 }
             } else {
                 syntaxApproved = false;
-
             }
         } else {
             syntaxApproved = false;
-
         }
         return syntaxApproved;
     }
 
     public void sendUserlistToAll() {
-
+        ArrayList<String> userList = new ArrayList<>(userMap.keySet());
+        for (String user : userList) {
+            send("USERLIST# " +userList.toString(), userMap.get(user));
+            
+        }
     }
 
     public void send(String msg, ClientHandler reciever) {
