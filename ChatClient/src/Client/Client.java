@@ -9,13 +9,14 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Protocol.ProtocolStrings;
+import javax.swing.text.html.HTML;
 
 public class Client
 {
   Socket socket;
   private int port;
   private InetAddress serverAddress;
-  private Scanner input;
+  private static Scanner input;
   private PrintWriter output;
   
   public void connect(String address, int port) throws UnknownHostException, IOException
@@ -58,13 +59,16 @@ public class Client
       ip = args[1];
     }
     try {
-      Client tester = new Client();      
-      tester.connect(ip, port);
-      System.out.println("Sending 'Hello world'");
-      tester.send("Hello World");
-      System.out.println("Waiting for a reply");
-      System.out.println("Received: " + tester.receive()); //Important Blocking call         
-      tester.stop();      
+      Client myClient = new Client();      
+      myClient.connect(ip, port);
+      System.out.println("Connected to: \n" + 
+                            "ip: " + ip + " port: " + port);
+      
+      myClient.send(input.nextLine());
+      
+      System.out.println(myClient.receive()); //Important Blocking call  
+      
+      myClient.stop();      
       //System.in.read();      
     } catch (UnknownHostException ex) {
       Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
