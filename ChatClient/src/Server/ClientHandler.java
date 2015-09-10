@@ -90,6 +90,7 @@ public class ClientHandler extends Thread {
                 writer.println("You didnt enter the correct command.");
                 clientName();
             }
+            
         } else {
             writer.println("You have already chosen a username. \n"
                     + "Changing your username is not permitted.");

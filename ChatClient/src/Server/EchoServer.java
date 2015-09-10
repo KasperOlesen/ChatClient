@@ -76,7 +76,6 @@ public class EchoServer {
         } else {
             send("Error: Incompatible input! Missing '#' \n"
                     + "Use MSG#Username#message to message others.", userMap.get(recievers));
-
         }
     }
 
