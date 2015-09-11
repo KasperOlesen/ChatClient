@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Preben
+ * @author Christian
  */
 public class EchoServerTest {
 
@@ -44,7 +44,7 @@ public class EchoServerTest {
     public void testSyntaxCheckTrue() {
         System.out.println("SyntaxCheckTrue");
         String msg = "MSG#BOB#Hej";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = true;
         boolean result = instance.syntaxCheck(msg);
         assertEquals(expResult, result);
@@ -54,7 +54,7 @@ public class EchoServerTest {
     public void testSyntaxCheckForHashSign() {
         System.out.println("SyntaxCheckForHashSign");
         String msg = "MSGBOBHej";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = false;
         boolean result = instance.syntaxCheck(msg);
         assertEquals(expResult, result);
@@ -64,7 +64,7 @@ public class EchoServerTest {
     public void testSyntaxCheckForMsgLength() {
         System.out.println("SyntaxCheckForMsgLength");
         String msg = "MSG#";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = false;
         boolean result = instance.syntaxCheck(msg);
         assertEquals(expResult, result);
@@ -74,7 +74,7 @@ public class EchoServerTest {
     public void testSyntaxCheckForSpelling() {
         System.out.println("SyntaxCheckForSpelling");
         String msg = "SGM#BOB#Test";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = false;
         boolean result = instance.syntaxCheck(msg);
         assertEquals(expResult, result);
@@ -84,7 +84,7 @@ public class EchoServerTest {
     public void testCheckUserNameTrue() {
         System.out.println("CheckUserNameTrue");
         String msg = "USER#BOB";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = true;
         boolean result = instance.checkUserName(msg);
         assertEquals(expResult, result);
@@ -95,7 +95,7 @@ public class EchoServerTest {
     public void testCheckUserNameHashSign() {
         System.out.println("CheckUserNameHashSign");
         String msg = "USERBOB";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = false;
         boolean result = instance.checkUserName(msg);
         assertEquals(expResult, result);
@@ -106,7 +106,7 @@ public class EchoServerTest {
     public void testCheckUserNameLength() {
         System.out.println("CheckUserNameLength");
         String msg = "USER#";
-        EchoServer instance = new EchoServer();
+        TcpServer instance = new TcpServer();
         boolean expResult = false;
         boolean result = instance.checkUserName(msg);
         assertEquals(expResult, result);

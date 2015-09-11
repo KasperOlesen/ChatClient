@@ -132,7 +132,6 @@ public class Chat extends javax.swing.JFrame {
             }
             ClientMsg.setText("");
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

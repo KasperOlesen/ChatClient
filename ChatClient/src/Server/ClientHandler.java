@@ -16,11 +16,11 @@ public class ClientHandler extends Thread {
     private final Socket socket;
     private PrintWriter writer;
     private Scanner input;
-    private final EchoServer server;
+    private final TcpServer server;
     private boolean nameChanged = false;
     private String chosenName;
 
-    public ClientHandler(Socket socket, EchoServer server) throws IOException {
+    public ClientHandler(Socket socket, TcpServer server) throws IOException {
         this.socket = socket;
         this.server = server;
     }
@@ -46,7 +46,7 @@ public class ClientHandler extends Thread {
             }
 
             String message = input.nextLine(); //IMPORTANT blocking call
-            Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
+            Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
 
             while (!message.equals(ProtocolStrings.STOP)) {
 
@@ -58,7 +58,7 @@ public class ClientHandler extends Thread {
                     writer.println("SyntaxError: You have used a wrong command \n"
                             + "The correct command is: MSG#RECIEVER#MESSAGE");
                 }
-                Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
+                Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
 
                 message = input.nextLine(); //IMPORTANT blocking call
             }
@@ -67,7 +67,7 @@ public class ClientHandler extends Thread {
             server.sendUserlistToAll();
             writer.println(ProtocolStrings.STOP);//Echo the stop message back to the client for a nice closedown
             socket.close();
-                Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Closed a Connection");
+                Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, "Closed a Connection");
         } catch (java.util.NoSuchElementException ex) {
             server.userMap.remove(chosenName);
             server.sendUserlistToAll();
