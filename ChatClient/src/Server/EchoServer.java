@@ -138,4 +138,26 @@ public class EchoServer {
         reciever.send(msg);
 
     }
+
+    public boolean checkUserName(String temp) {
+        if (temp.startsWith("USER#")) {
+            String[] nameInput = temp.split("#");
+            if (nameInput.length == 2) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
+    public String setClientName(String temp, ClientHandler aThis) {
+        String[] nameInput = temp.split("#");
+        String chosenName = nameInput[1].toUpperCase();
+        System.out.println(chosenName);
+        userMap.put(chosenName, aThis);
+        return chosenName;
+
+    }
+
 }
