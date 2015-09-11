@@ -20,7 +20,7 @@ public class EchoServer {
     private static boolean keepRunning = true;
     private static ServerSocket serverSocket;
     private static final Properties properties = Utils.initProperties("server.properties");
-    private final List<ClientHandler> clientHandlerList = new LinkedList();
+    // private final List<ClientHandler> clientHandlerList = new LinkedList();
     Map<String, ClientHandler> userMap = new HashMap();
     String username;
     String reciever;
@@ -42,7 +42,7 @@ public class EchoServer {
                 Logger.getLogger(EchoServer.class.getName()).log(Level.INFO, "Connected to a client");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
 
-                clientHandlerList.add(clientHandler);
+                //clientHandlerList.add(clientHandler);
                 clientHandler.start();
             } while (keepRunning);
         } catch (IOException ex) {
@@ -69,34 +69,29 @@ public class EchoServer {
             String[] commandInput = msg.split("#");
             reciever = commandInput[1];
             msg = clientName + ": " + commandInput[2];
-            
+
             //delete
-            //System.out.println("reciever: " +reciever);
+            //System.out.println("reciever: " + reciever);
             //System.out.println("keyset: " + userMap.keySet());
-            
             if (reciever.contains(",") && reciever.length() > 1) {
 
                 String[] users = reciever.split(",");
                 ArrayList<String> userMapKeyList = new ArrayList<>(userMap.keySet());
                 for (String userKeyFromMap : userMapKeyList) {
-                    
+
                     //delete
-                    //System.out.println("User from list: " +userKeyFromMap);
-                    
+                    //System.out.println("User from list: " + userKeyFromMap);
                     for (String user : users) {
-                        
+
                         //delete
                         //System.out.println("User from input: " +user);
-                        
                         if (userKeyFromMap.equalsIgnoreCase(user)) {
-                            
+
                             send(msg, userMap.get(user.toUpperCase()));
                         }
                     }
                 }
-            }
-            
-            else if (userMap.containsKey(reciever.toUpperCase())) {
+            } else if (userMap.containsKey(reciever.toUpperCase())) {
                 send(msg, userMap.get(reciever.toUpperCase()));
             }
         } else {
@@ -110,11 +105,11 @@ public class EchoServer {
         String[] recieverInfo;
         boolean syntaxApproved;
 
-        if (msg.startsWith("MSG") && msg.contains("#")) {
+        if (msg.startsWith("MSG") && msg.contains("#") && msg.length() > 4) {
+
             commandInput = msg.split("#");
-            String command = commandInput[0];
             String toClients = commandInput[1];
-            
+
             if (commandInput.length == 3) {
                 if (toClients.contains(",")) {
                     recieverInfo = toClients.split(",");
@@ -134,13 +129,12 @@ public class EchoServer {
     public void sendUserlistToAll() {
         ArrayList<String> userList = new ArrayList<>(userMap.keySet());
         for (String user : userList) {
-            send("USERLIST# " +userList.toString(), userMap.get(user));
-            
+            send("USERLIST# " + userList.toString(), userMap.get(user));
+
         }
     }
 
     public void send(String msg, ClientHandler reciever) {
-
         reciever.send(msg);
 
     }

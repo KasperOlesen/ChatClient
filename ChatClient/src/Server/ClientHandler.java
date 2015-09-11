@@ -69,6 +69,8 @@ public class ClientHandler extends Thread {
 
     public void send(String msg) {
         writer.println(msg);
+        writer.flush();
+        
     }
 
     // clientName() is responsible for getting the username from a newly
