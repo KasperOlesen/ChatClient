@@ -66,7 +66,6 @@ public class Client extends Observable implements Runnable {
             System.out.println(myClient.receive()); //Important Blocking call  
 
             myClient.stop();
-            //System.in.read();      
         } catch (UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

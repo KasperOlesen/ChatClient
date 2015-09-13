@@ -14,12 +14,11 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Christian
+ * @author Christian Sindt
  */
 public class GUI extends javax.swing.JFrame implements Observer {
 
     Client c;
-
     String user;
     String msg;
 

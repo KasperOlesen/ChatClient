@@ -60,7 +60,6 @@ public class ClientHandler extends Thread {
                             + "The correct command is: MSG#RECIEVER#MESSAGE");
                 }
                 Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
-
                 message = input.nextLine(); //IMPORTANT blocking call
             }
 

@@ -64,23 +64,15 @@ public class TcpServer {
             reciever = commandInput[1];
             msg = clientName + ": " + commandInput[2];
 
-            //delete
-            //System.out.println("reciever: " + reciever);
-            //System.out.println("keyset: " + userMap.keySet());
             if (reciever.contains(",") && reciever.length() > 1) {
 
                 String[] users = reciever.split(",");
                 ArrayList<String> userMapKeyList = new ArrayList<>(userMap.keySet());
                 for (String userKeyFromMap : userMapKeyList) {
 
-                    //delete
-                    //System.out.println("User from list: " + userKeyFromMap);
                     for (String user : users) {
 
-                        //delete
-                        //System.out.println("User from input: " +user);
                         if (userKeyFromMap.equalsIgnoreCase(user)) {
-
                             send(msg, userMap.get(user.toUpperCase()));
                         }
                     }
@@ -143,7 +135,6 @@ public class TcpServer {
         }
         return false;
     }
-
 
     public String setClientName(String temp, ClientHandler aThis) {
         String[] nameInput = temp.split("#");
