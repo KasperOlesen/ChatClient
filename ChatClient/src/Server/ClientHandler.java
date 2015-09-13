@@ -33,9 +33,10 @@ public class ClientHandler extends Thread {
             writer = new PrintWriter(socket.getOutputStream(), true);
 
             while (!nameChanged) {
-                writer.println("Please select a username \n"
-                        + "By typing USER#YourUsernameHere");
+                writer.println("Please select a username By typing USER#YourUsernameHere");
+
                 String temp = input.nextLine();
+                System.out.println("temp = " + temp);
                 boolean UserCheck = server.checkUserName(temp);
                 if (UserCheck) {
                     chosenName = server.setClientName(temp, this);
@@ -67,7 +68,7 @@ public class ClientHandler extends Thread {
             server.sendUserlistToAll();
             writer.println(ProtocolStrings.STOP);//Echo the stop message back to the client for a nice closedown
             socket.close();
-                Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, "Closed a Connection");
+            Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, "Closed a Connection");
         } catch (java.util.NoSuchElementException ex) {
             server.userMap.remove(chosenName);
             server.sendUserlistToAll();
@@ -82,7 +83,4 @@ public class ClientHandler extends Thread {
 
     }
 
-    // clientName() is responsible for getting the username from a newly
-    // connected user, and doesnt let the user change it if it
-    // has already been changed once.
 }

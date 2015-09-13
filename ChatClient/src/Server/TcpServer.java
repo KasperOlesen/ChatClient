@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utils.Utils;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +17,6 @@ public class TcpServer {
     private static boolean keepRunning = true;
     private static ServerSocket serverSocket;
     private static final Properties properties = Utils.initProperties("server.properties");
-    // private final List<ClientHandler> clientHandlerList = new LinkedList();
     Map<String, ClientHandler> userMap = new HashMap();
     String username;
     String reciever;
@@ -41,8 +37,6 @@ public class TcpServer {
                 Socket socket = serverSocket.accept(); //Important Blocking call
                 Logger.getLogger(TcpServer.class.getName()).log(Level.INFO, "Connected to a client");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
-
-                //clientHandlerList.add(clientHandler);
                 clientHandler.start();
             } while (keepRunning);
         } catch (IOException ex) {
