@@ -122,10 +122,8 @@ public class GUI extends javax.swing.JFrame implements Observer {
             c = new Client();
             c.connect("localhost", 9090);
             c.addObserver(this);
-
             Thread t = new Thread(c);
             t.start();
-
         } catch (IOException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -188,7 +186,7 @@ public class GUI extends javax.swing.JFrame implements Observer {
 
         if (o.getClass().equals(Client.class)) {
             String response = (String) arg;
-            AllMsg.setText(response);
+            AllMsg.setText("\n" + response);
 
         }
 
